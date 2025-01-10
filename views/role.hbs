@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   {{> header}}
+</head>
+
+<body>
+    {{> navbar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Role Post and Grid</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Role</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- jquery validation -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Role Submit</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            {{#if msg}}
+                            <p class="{{msg_type}} m-2">{{msg}}</p>
+                            {{/if}}
+                            <form action="/rolesubmit" method="post" onsubmit="return validateRoleForm()">
+    <div class="card-body">
+        <div class="form-group">
+            <label for="Rcode">Enter Role Code</label>
+            <input type="text" name="Rcode" class="form-control" id="Rcode" placeholder="Role Code">
+            <div id="RcodeError" class="text-danger" style="display:none;"></div> <!-- Error message -->
+        </div>
+        <div class="form-group">
+            <label for="Rname">Enter Role</label>
+            <input type="text" name="Rname" class="form-control" id="Rname" placeholder="Role Name">
+            <div id="RnameError" class="text-danger" style="display:none;"></div> <!-- Error message -->
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label><br>
+            <div class="btn-group" role="group" aria-label="Status selection">
+                <button type="button" class="btn btn-outline-primary" id="activeButton" onclick="setStatus('Active')">Active</button>
+                <button type="button" class="btn btn-outline-secondary" id="inactiveButton" onclick="setStatus('Inactive')">Inactive</button>
+            </div>
+            <input type="hidden" name="status" id="status" value="Active"> <!-- Default to Active -->
+        </div>
+        <button type="submit" class="btn btn-primary float-right">Submit</button>
+    </div>
+</form>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="refreshPage()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Form submitted successfully!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="refreshPage()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                    <!--/.col (left) -->
+                </div>
+                <!--/.row -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit Role Record</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form inside the modal -->
+                                <form id="editForm" action="/role_update/{{record.id}}" method="post">
+                                <div class="form-group">
+                                        <label for="Rcode">Enter Role Code</label>
+                                        <input type="text" name="Rcode" class="form-control" id="editRcode" placeholder="Role Code">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Rname">Enter Name</label>
+                                        <input type="text" name="Rname" class="form-control" id="editRname" placeholder="Role Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label><br>
+                                        <!-- Dropdown button -->
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" id="editStatusButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Active
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" onclick="setStatus('Active', 'edit')">Active</a>
+                                                <a class="dropdown-item" href="#" onclick="setStatus('Inactive', 'edit')">Inactive</a>
+                                            </div>
+                                        </div>
+                                        <!-- Hidden input field -->
+                                        <input type="hidden" name="status" id="editStatus" value="Active"> <!-- Default to Active -->
+                                    </div>
+                                    <button type="submit" class="btn btn-primary float-right">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Role Id</th>
+                                            <th>Role Code</th>
+                                            <th>Role Name</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each display}}
+                                            <tr>
+                                                <td>{{role_id}}</td>
+                                                <td>{{this.Rcode}}</td>
+                                                <td>{{this.Rname}}</td>
+                                                <td>{{this.status}}</td>
+                                                <td>
+                                                    <a href="#" onclick="populateEditForm('{{this.id}}', '{{this.Rcode}}', '{{this.Rname}}', '{{this.status}}')" data-toggle="modal" data-target="#editModal" class="btn btn-warning btn-sm">Edit</a>
+
+                                                    <a href="/role_delete/{{this.role_id}}" class="btn btn-danger btn-sm">Delete</a>
+                                                </td>
+                                            </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    {{> footer}}
+
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+    <script src="/js/formValidation.js"></script>
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+                language: {
+                    search: "Search:",
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                }
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
+        function setStatus(status, formType) {
+            if (formType === 'edit') {
+                document.getElementById('editStatus').value = status;
+                document.getElementById('editStatusButton').textContent = status;
+            } else {
+                document.getElementById('status').value = status;
+                document.querySelector('.btn-primary.dropdown-toggle').textContent = status;
+            }
+        }
+
+        function populateEditForm(id, Rcode, Rname, status) {
+            document.getElementById('editForm').action = '/role_update/' + id;
+            document.getElementById('editRcode').value = Rcode;
+            document.getElementById('editRname').value = Rname;
+            setStatus(status, 'edit');
+        }
+    </script>
+</body>
+
+</html>

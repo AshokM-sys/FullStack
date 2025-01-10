@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> header}}
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    {{> navbar}}
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Employee Salary Generation</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Salary Generation</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+    {{#each display}}
+        <div class="company-details d-flex align-items-center mb-4">
+            <img src="{{this.Logopath}}" alt="{{this.CompanyName}}" class="mr-3" style="max-width: 70px; height: 70px;">
+            <div class="text-center w-100">
+                <h3 class="mb-1 text-danger">{{this.CompanyName}}</h3>
+                <div class="address">{{this.Address}}</div>
+                <div class="address">{{this.City}}, {{this.State}} - {{this.Pincode}}</div>
+            </div>
+        </div>
+    {{else}}
+        <p>Error: Company details not found.</p>
+    {{/each}}
+</div>
+
+
+                <div class="container mt-5">
+                    <div class="form-group">
+                        <label for="empCode">Enter Employee Code</label>
+                        <input type="text" name="empCode" id="empCode" class="form-control" placeholder="Employee Code" onblur="fetchSalaryDetails()">
+                        <p class="text text-danger">Please Enter Employee Code (eg: 000001)</p>
+                    </div>
+
+                    <div id="salaryDetails" style="display:none;">
+                        <h4 class="mt-4">Salary Details</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="empName">Employee Name</label>
+                                <input type="text" id="empName" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Basic">Basic</label>
+                                <input type="text" id="Basic" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="DA">DA</label>
+                                <input type="text" id="DA" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label for="HRA">HRA</label>
+                                <input type="text" id="HRA" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Conveyance">Conveyance</label>
+                                <input type="text" id="Conveyance" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Salary">Salary</label>
+                                <input type="text" id="Salary" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label for="EPF">EPF</label>
+                                <input type="text" id="EPF" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ESI">ESI</label>
+                                <input type="text" id="ESI" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Advance">Advance</label>
+                                <input type="text" id="Advance" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label for="Incentive">Incentive</label>
+                                <input type="text" id="Incentive" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="account_number">Account Number</label>
+                                <input type="text" id="account_number" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bank_name">Bank Name</label>
+                                <input type="text" id="bank_name" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label for="branch">Branch Name</label>
+                                <input type="text" id="branch" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ifsc_code">IFSC Code</label>
+                                <input type="text" id="ifsc_code" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Attendance Details -->
+                        <h4 class="mt-4">Attendance Details</h4>
+                        <div class="form-group row mt-3">
+                            <div class="col-md-4">
+                                <label for="work_days">Total Working Days</label>
+                                <input type="text" name="work_days" id="work_days" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="present_days">No. of Days Present</label>
+                                <input type="text" name="present_days" id="present_days" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="absent_days">No. of Days Absent</label>
+                                <input type="text" name="absent_days" id="absent_days" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <label for="month_year">Month / Year</label>
+                                <input type="text" id="month_year" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="totalSalary">Total Salary</label>
+                                <input type="text" id="totalSalary" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div id="pdfPreview" style="display: none;">
+                            <h4>Payslip Preview</h4>
+                            <iframe id="pdfIframe" style="width: 100%; height: 500px; border: none;"></iframe>
+                            <button id="downloadPdf" class="btn btn-primary mt-3" style="display: none;">Download PDF</button>
+                        </div>
+                        <button class="btn btn-success mt-3" onclick="showPayslipPreview()">Show Payslip Preview</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+    {{> footer}}
+
+<!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <script>
+        function fetchSalaryDetails() {
+            const empCode = document.getElementById('empCode').value.trim();
+            if (empCode.length === 0) {
+                clearSalaryDetails();
+                document.getElementById('salaryDetails').style.display = 'none';
+                return;
+            }
+            
+            // Fetch salary details
+            $.get(`/api/salary/${empCode}`)
+                .done(function(data) {
+                    console.log('Received salary data:', data);
+                    
+                    // Populate input fields
+                    document.getElementById('empName').value = data.empName || '';
+                    document.getElementById('Basic').value = data.Basic || '';
+                    document.getElementById('DA').value = data.DA || '';
+                    document.getElementById('HRA').value = data.HRA || '';
+                    document.getElementById('Conveyance').value = data.Conveyance || '';
+                    document.getElementById('Salary').value = data.Salary || '';
+                    document.getElementById('EPF').value = data.EPF || '';
+                    document.getElementById('ESI').value = data.ESI || '';
+                    document.getElementById('Advance').value = data.Advance || '';
+                    document.getElementById('Incentive').value = data.Incentive || '';
+                    document.getElementById('account_number').value = data.account_number || '';
+                    document.getElementById('bank_name').value = data.bank_details?.bank_name || '';
+                    document.getElementById('branch').value = data.bank_details?.branch || '';
+                    document.getElementById('ifsc_code').value = data.bank_details?.ifsc_code || '';
+
+                    // Show the salary details section
+                    document.getElementById('salaryDetails').style.display = 'block';
+                    fetchAttendanceDetails(empCode);
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('Salary request failed:', textStatus, errorThrown);
+                    alert('Employee not found or server error');
+                    clearSalaryDetails();
+                    document.getElementById('salaryDetails').style.display = 'none';
+                });
+        }
+
+        function fetchAttendanceDetails(empCode) {
+            const url = `/api/attendance/${empCode}`; // Adjust URL as needed
+            console.log('Fetching attendance details from URL:', url);
+
+            $.get(url)
+                .done(function(data) {
+                    // Populate attendance fields
+                    document.getElementById('work_days').value = data.total_days || 0;
+                    document.getElementById('present_days').value = data.present_days || 0;
+                    document.getElementById('absent_days').value = data.absent_days || 0;
+
+                    // Set month and year field
+                    if (data.month && data.year) {
+                        document.getElementById('month_year').value = `${data.month} / ${data.year}`;
+                    } else {
+                        document.getElementById('month_year').value = '';
+                    }
+
+                    // Calculate and display total salary
+                    calculateTotalSalary(data);
+                })
+                .fail(function() {
+                    console.error('Attendance request failed');
+                    document.getElementById('work_days').value = '';
+                    document.getElementById('present_days').value = '';
+                    document.getElementById('absent_days').value = '';
+                    document.getElementById('month_year').value = '';
+                });
+        }
+
+        function calculateTotalSalary(data) {
+            const basicSalary = parseFloat(document.getElementById('Basic').value) || 0;
+            const presentDays = parseInt(data.present_days) || 0;
+
+            // Assuming 30 days in a month for daily salary calculation
+            const dailySalary = basicSalary / 30;
+            const totalSalary = dailySalary * presentDays;
+
+            document.getElementById('totalSalary').value = totalSalary.toFixed(2);
+        }
+
+        
+    async function showPayslipPreview() {
+    const empCode = document.getElementById('empCode').value.trim();
+    if (empCode) {
+        // Redirect to the payslip preview page with employee code
+        window.location.href = `/payslip_preview?empCode=${empCode}`;
+    } else {
+        alert('Please enter an Employee Code.');
+    }
+}
+    </script>
+
+</body>
+</html>

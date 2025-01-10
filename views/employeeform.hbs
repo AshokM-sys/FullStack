@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   {{> header}}
+</head>
+
+<body>
+    {{> navbar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Employee Form</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Employee Form</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- jquery validation -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Employee Form</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                <form action="/empsubmit" method="post">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                            <label for="empCode">Employee Code</label>
+                            <input type="text" name="empCode" class="form-control" id="empCode" placeholder="Enter Code">
+                        </div>
+                        <div class="form-group">
+                            <label for="fname">Firstname</label>
+                            <input type="text" name="fname" class="form-control" id="fname" placeholder="Firstname">
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Lastname</label>
+                            <input type="text" name="lname" class="form-control" id="lname" placeholder="Lastname">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select class="form-control" id="employee_gender" name="employee_gender">
+    <!-- Options will be populated by JavaScript -->
+</select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" name="dob" class="form-control" id="dob">
+                        </div>
+                        <div class="form-group">
+                            <label for="doj">Date of Joining</label>
+                            <input type="date" name="doj" class="form-control" id="doj">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone">
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                        </div>
+                    </div>
+                    <!--/.col (left) -->
+                </div>
+                <!--/.row -->
+            </div>
+        </section>
+            </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    {{> footer}}
+
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+    <!-- Initialize DataTables -->
+
+    
+</body>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+    fetch('/genders')
+        .then(response => response.json())
+        .then(genders => {
+            console.log('Fetched genders:', genders); // Log the fetched data
+            
+            const genderSelect = document.getElementById('employee_gender');
+            genderSelect.innerHTML = '<option value="">Select Gender</option>'; // Add a default option
+
+            // Ensure the fetched data is an array and contains valid strings
+            if (Array.isArray(genders)) {
+                genders.forEach(gender => {
+                    if (gender) { // Ensure the gender value is not null or empty
+                        const option = document.createElement('option');
+                        option.value = gender; // Set the value attribute to the gender
+                        option.textContent = gender; // Display the gender as the text
+                        genderSelect.appendChild(option);
+                    }
+                });
+            } else {
+                console.error('Expected an array of gender options, but received:', genders);
+            }
+        })
+        .catch(error => console.error('Error fetching gender options:', error));
+});
+
+
+
+    </script>
+</html>

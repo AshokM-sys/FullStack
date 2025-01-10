@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    {{> header}}
+    {{> navbar}}
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Edit Employee</h1>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Employee Attendance</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Employee Code</th>
+                                    <th>Employee Name</th>
+                                    <th>Department</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Attendance</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+<tbody>
+                                {{#each display}}
+                                <tr>
+                                    <td>{{this.id}}</td>
+                                    <td>{{this.empCode}}</td>
+                                    <td>{{this.fname}} {{this.lname}}</td>
+                                    <td>{{this.department}}</td>
+                                    <td class="current-date"></td>
+                                    <td>
+                                        <button class="btn btn-toggle status-button btn-sm btn-success" data-status="active">Active</button>
+                                    </td>
+                                    <td>
+                                        <!-- Leave type dropdown for each employee -->
+                                        <div class="form_group">
+                                            <select class="form-control-sm leave-type" name="leave" data-emp-id="{{this.id}}">
+                                                <!-- Options will be populated by JavaScript -->
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm edit-attendance">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+
+
+                        </table>
+                        <button class="btn btn-primary mt-3 float-right" id="submitTotalAttendance">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {{> footer}}
+
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="../../dist/js/adminlte.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Edit Attendance Modal -->
+    <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-labelledby="editAttendanceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAttendanceModalLabel">Edit Attendance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editAttendanceId">
+                    <div class="mb-3">
+                        <label for="editAttendanceSelect" class="form-label">Attendance</label>
+                        <select class="form-control" id="editAttendanceSelect">
+                            <option value="present">Present</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editReason" class="form-label">Reason</label>
+                        <input type="text" class="form-control" id="editReason" placeholder="Reason for absence" disabled>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for selecting comp-off date -->
+<div id="compOffModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Comp-Off Date</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="compOffForm">
+                    <div class="form-group">
+                        <label for="compOffDate">Comp-Off Date</label>
+                        <input type="date" id="compOffDate" class="form-control" required>
+                    </div>
+                    <input type="hidden" id="compOffRowIndex" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitCompOffDate">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+    const table = $('#example1').DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+        language: {
+            search: "Search:",
+            paginate: {
+                previous: "Previous",
+                next: "Next"
+            }
+        },
+        initComplete: function () {
+            populateLeaveTypeDropdown();  // Populate dropdowns when the table is first loaded
+            populateCurrentDate();         // Populate the current date for each row
+        },
+        drawCallback: function () {
+            populateLeaveTypeDropdown();  // Repopulate dropdowns after redrawing the table
+            populateCurrentDate();         // Repopulate current date in the table rows
+        }
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    // Fetch leave codes from the server once
+    $.ajax({
+        url: '/getfleave',
+        type: 'GET',
+        success: function (leaveCodes) {
+            window.leaveCodes = leaveCodes; // Store the leave codes globally for reuse
+            populateLeaveTypeDropdown();
+        },
+        error: function (xhr) {
+            console.error('Error fetching leave codes:', xhr.responseJSON);
+        }
+    });
+
+    // Function to format date as 'DD-MM-YYYY'
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    // Set the current date for all rows
+    function populateCurrentDate() {
+        const currentDate = formatDate(new Date());
+        $('#example1 tbody tr').each(function () {
+            $(this).find('.current-date').text(currentDate);
+        });
+    }
+
+    // Populate the leave type dropdown for each row
+    function populateLeaveTypeDropdown() {
+        if (window.leaveCodes && Array.isArray(window.leaveCodes)) {
+            $('#example1 tbody tr').each(function () {
+                const leaveTypeSelect = $(this).find('.leave-type');
+                leaveTypeSelect.empty();  // Clear existing options
+
+                // Add a default option
+                leaveTypeSelect.append('<option value="">Select Leave Type</option>');
+
+                // Add options from the leaveCodes array
+                window.leaveCodes.forEach(function (leaveCode) {
+                    leaveTypeSelect.append(`<option value="${leaveCode}">${leaveCode}</option>`);
+                });
+            });
+        }
+    }
+
+    // Handle "Comp Off" selection
+    $('#example1').on('change', '.leave-type', function () {
+        const leaveType = $(this).val();
+
+        if (leaveType === 'Comp Off') {
+            // Open the modal to select the comp-off date
+            const rowIndex = $(this).closest('tr').index(); // Get the row index
+            $('#compOffRowIndex').val(rowIndex); // Store the row index in a hidden field
+            $('#compOffModal').modal('show');
+        }
+    });
+
+    // Handle submitting the comp-off date
+    $('#submitCompOffDate').on('click', function () {
+        const compOffDate = $('#compOffDate').val();
+        const rowIndex = $('#compOffRowIndex').val();
+
+        if (compOffDate) {
+            // Set the comp-off date in the corresponding dropdown for the selected row
+            $('#example1 tbody tr').eq(rowIndex).find('.leave-type').data('compoff-date', compOffDate);
+
+            // Close the modal
+            $('#compOffModal').modal('hide');
+        } else {
+            alert('Please select a valid comp-off date.');
+        }
+    });
+
+    // Submit total attendance data
+    $('#submitTotalAttendance').on('click', function () {
+        const attendanceData = [];
+
+        $('#example1 tbody tr').each(function () {
+            const empCode = $(this).find('td:eq(1)').text(); // Employee Code
+            const empname = $(this).find('td:eq(2)').text(); // Employee Name
+            const date = $(this).find('.current-date').text(); // Current Date
+            const formattedDate = date.split('-').reverse().join('-'); // Convert 'DD-MM-YYYY' to 'YYYY-MM-DD'
+            const status = $(this).find('.status-button').data('status'); // Status
+            const department = $(this).find('td:eq(3)').text(); // Department
+            const attendance = $(this).find('.leave-type').val() || null; // If empty, set attendance to null
+            const remark = $(this).find('.reason-input').val(); // Reason for absence
+            const compOffDate = $(this).find('.leave-type').data('compoff-date') || null; // Get comp-off date
+            const compOffSubmittedDate = compOffDate ? new Date().toISOString().split('T')[0] : null; // Today's date if comp-off is selected
+
+            attendanceData.push({
+                empCode,
+                empname,
+                date: formattedDate,
+                status,
+                department,
+                attendance,  // Attendance is now null if not selected
+                remark,
+                compOffDate,
+                compOffSubmittedDate
+            });
+        });
+
+        // Submit the attendance data to the backend
+        $.ajax({
+            type: 'POST',
+            url: '/attendance',  // Backend route for saving attendance
+            contentType: 'application/json',
+            data: JSON.stringify({ attendanceData }),
+            success: function (response) {
+                alert(response.message);
+            },
+            error: function (xhr) {
+                alert('Error: ' + xhr.responseJSON.message);
+            }
+        });
+    });
+
+});
+
+</script>
+
+
+
+
+
+

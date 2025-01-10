@@ -1,0 +1,23 @@
+<!-- views/sendSMS.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send SMS</title>
+</head>
+<body>
+    <h1>Send an SMS</h1>
+    <form action="/sendsms" method="POST">
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" required>
+        <br><br>
+        
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+        <br><br>
+        
+        <button type="submit">Send SMS</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- Font Awesome for WhatsApp Icon -->
+    <style>
+        /* Center everything in the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Text styling */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Button styling */
+        .whatsapp_button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25d366; /* WhatsApp Green */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for the button */
+        .whatsapp_button:hover {
+            background-color: #128C7E;
+        }
+
+        .whatsapp-icon {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat with us through WhatsApp</h1>
+
+    <!-- Button to chat -->
+    <a href="https://wa.me/+918072411363" class="whatsapp_button" target="_blank" rel="noopener noreferrer">
+        <i class="fa fa-whatsapp whatsapp-icon"></i> Chat with us
+    </a>
+</body>
+</html>

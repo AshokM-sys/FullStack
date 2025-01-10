@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Picker</title>
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <style>
+        .input-group {
+            width: 25%; /* Set input box width to 25% */
+        }
+        .time-picker {
+            display: none; /* Hide dropdowns initially */
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .time-picker.active {
+            display: block; /* Show dropdowns when active */
+        }
+        .input-container {
+            position: relative; /* To position the dropdown */
+        }
+        .time-picker-row {
+            display: flex; /* Align items in a straight line */
+            gap: 5px; /* Space between dropdowns */
+        }
+        .time-picker select {
+            width: auto; /* Adjust dropdown width */
+        }
+    </style>
+</head>
+<body>
+    {{> header}}
+    {{> navbar}}
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Time Picker</h1>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Time Picker</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row align-items-center">
+                                <label class="my-2">Shift Time 1:</label>
+                                <div class="col-sm-2 input-container">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="reservationtime1" value="12:00 PM" readonly>
+                                    </div>
+                                    <div class="time-picker" id="timePickerDropdown1">
+                                        <div class="time-picker-row">
+                                            <select id="hours1" class="form-control">
+                                                <option value="">Hour</option>
+                                                <script>
+                                                    for (let i = 1; i <= 12; i++) {
+                                                        document.write(`<option value="${i < 10 ? '0' + i : i}">${i < 10 ? '0' + i : i}</option>`);
+                                                    }
+                                                </script>
+                                            </select>
+                                            <select id="minutes1" class="form-control">
+                                                <option value="">Minutes</option>
+                                                <script>
+                                                    for (let i = 0; i < 60; i += 5) {
+                                                        document.write(`<option value="${i < 10 ? '0' + i : i}">${i < 10 ? '0' + i : i}</option>`);
+                                                    }
+                                                </script>
+                                            </select>
+                                            <select id="ampm1" class="form-control">
+                                                <option value="AM">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary mt-2" id="setTimeBtn1">Set Time</button>
+                                    </div>
+                                </div>
+
+                                <label class="my-2 mx-2">Shift Time 2:</label>
+                                <div class="col-sm-2 input-container">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="reservationtime2" value="12:00 PM" readonly>
+                                    </div>
+                                    <div class="time-picker" id="timePickerDropdown2">
+                                        <div class="time-picker-row">
+                                            <select id="hours2" class="form-control">
+                                                <option value="">Hour</option>
+                                                <script>
+                                                    for (let i = 1; i <= 12; i++) {
+                                                        document.write(`<option value="${i < 10 ? '0' + i : i}">${i < 10 ? '0' + i : i}</option>`);
+                                                    }
+                                                </script>
+                                            </select>
+                                            <select id="minutes2" class="form-control">
+                                                <option value="">Minutes</option>
+                                                <script>
+                                                    for (let i = 0; i < 60; i += 5) {
+                                                        document.write(`<option value="${i < 10 ? '0' + i : i}">${i < 10 ? '0' + i : i}</option>`);
+                                                    }
+                                                </script>
+                                            </select>
+                                            <select id="ampm2" class="form-control">
+                                                <option value="AM">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary mt-2" id="setTimeBtn2">Set Time</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.1.0
+        </div>
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    </footer>
+
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../dist/js/adminlte.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Function to populate dropdowns based on input value
+            function populateDropdowns(inputId, hourId, minuteId, ampmId) {
+                const inputTime = $(inputId).val();
+                const [time, period] = inputTime.split(' ');
+                const [hour, minute] = time.split(':');
+
+                // Set the dropdown values
+                $(hourId).val(hour);
+                $(minuteId).val(minute);
+                $(ampmId).val(period);
+            }
+
+            // Show dropdown when the input is clicked
+            $('#reservationtime1').click(function() {
+                populateDropdowns('#reservationtime1', '#hours1', '#minutes1', '#ampm1');
+                $('#timePickerDropdown1').toggleClass('active');
+                $('#timePickerDropdown2').removeClass('active'); // Hide second dropdown
+            });
+
+            $('#reservationtime2').click(function() {
+                populateDropdowns('#reservationtime2', '#hours2', '#minutes2', '#ampm2');
+                $('#timePickerDropdown2').toggleClass('active');
+                $('#timePickerDropdown1').removeClass('active'); // Hide first dropdown
+            });
+
+            // Set the selected time when button is clicked
+            $('#setTimeBtn1').click(function() {
+                const hour = $('#hours1').val();
+                const minute = $('#minutes1').val();
+                const ampm = $('#ampm1').val();
+
+                if (hour && minute && ampm) {
+                    const selectedTime = `${hour}:${minute} ${ampm}`;
+                    $('#reservationtime1').val(selectedTime);
+                    $('#timePickerDropdown1').removeClass('active'); // Hide dropdown
+                } else {
+                    alert('Please select a valid time.');
+                }
+            });
+
+            $('#setTimeBtn2').click(function() {
+                const hour = $('#hours2').val();
+                const minute = $('#minutes2').val();
+                const ampm = $('#ampm2').val();
+
+                if (hour && minute && ampm) {
+                    const selectedTime = `${hour}:${minute} ${ampm}`;
+                    $('#reservationtime2').val(selectedTime);
+                    $('#timePickerDropdown2').removeClass('active'); // Hide dropdown
+                } else {
+                    alert('Please select a valid time.');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            $(document).click(function(event) {
+                if (!$(event.target).closest('.input-container').length) {
+                    $('.time-picker').removeClass('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

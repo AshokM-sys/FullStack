@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> header}}
+</head>
+
+<body>
+    {{> navbar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>PF Details</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">PF</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">PF Details</h3>
+                            </div>
+                            {{#if msg}}
+                            <p class="{{msg_type}} m-2">{{msg}}</p>
+                            {{/if}}
+                            <form action="/pfsubmit" method="post" onsubmit="return validatePFForm()">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="epf_id">Enter EPF ID</label>
+                                        <input type="text" name="epf_id" class="form-control" id="epf_id" placeholder="EPF ID">
+                                        <span id="epfIdError" style="color: red; display: none;"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="epf_no">Enter EPF Number</label>
+                                        <input type="text" name="epf_no" class="form-control" id="epf_no" placeholder="EPF Number">
+                                        <span id="epfNoError" style="color: red; display: none;"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="esi_no">Enter ESI Number</label>
+                                        <input type="text" name="esi_no" class="form-control" id="esi_no" placeholder="ESI Number">
+                                        <span id="esiNoError" style="color: red; display: none;"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label><br>
+                                        <!-- Button group for status selection -->
+                                        <div class="btn-group" role="group" aria-label="Status selection">
+                                            <button type="button" class="btn btn-outline-primary" id="activeButton" onclick="setStatus('Active')">Active</button>
+                                            <button type="button" class="btn btn-outline-secondary" id="inactiveButton" onclick="setStatus('Inactive')">Inactive</button>
+                                        </div>
+                                        <!-- Hidden input field -->
+                                        <input type="hidden" name="status" id="status" value="Active"> <!-- Default to Active -->
+                                    </div>
+                                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--/.col (left) -->
+                </div>
+                <!--/.row -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Edit City Record</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form inside the modal -->
+                                <form id="editForm" action="/pfupdate/{{record.id}}" method="post">
+                                    <div class="form-group">
+                                        <label for="editepf_id">Enter EPF ID</label>
+                                        <input type="text" name="epf_id" class="form-control" id="editepf_id" placeholder="EPF ID">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editepf_no">Enter EPF NO</label>
+                                        <input type="text" name="epf_no" class="form-control" id="editepf_no" placeholder="EPF NO">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editCname">Enter ESI NO</label>
+                                        <input type="text" name="esi_no" class="form-control" id="editesi_no" placeholder="ESI NO">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editStatus">Status</label><br>
+                                        <!-- Button group for status selection -->
+                                        <div class="btn-group" role="group" aria-label="Status selection">
+                                            <button type="button" class="btn btn-outline-primary" id="editActiveButton" onclick="setStatus('Active', 'edit')">Active</button>
+                                            <button type="button" class="btn btn-outline-secondary" id="editInactiveButton" onclick="setStatus('Inactive', 'edit')">Inactive</button>
+                                        </div>
+                                        <!-- Hidden input field -->
+                                        <input type="hidden" name="status" id="editStatus" value="Active"> <!-- Default to Active -->
+                                    </div>
+                                    <button type="submit" class="btn btn-primary float-right">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">DataTable</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" role="grid">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>EPF ID</th>
+                                            <th>EPF Number</th>
+                                            <th>ESI Number</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each display}}
+                                            <tr>
+                                                <td>{{id}}</td>
+                                                <td>{{this.epf_id}}</td>
+                                                <td>{{this.epf_no}}</td>
+                                                <td>{{this.esi_no}}</td>
+                                                <td>{{this.status}}</td>
+                                                <td>
+                                                    <a href="#" onclick="populateEditForm('{{this.id}}', '{{this.epf_id}}', '{{this.epf_no}}', '{{this.esi_no}}', '{{this.status}}')" data-toggle="modal" data-target="#editModal" class="btn btn-warning btn-sm">Edit</a>
+                                                    <a href="/pfdelete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>
+                                                </td>
+                                            </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="refreshPage()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Form submitted successfully!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="refreshPage()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    {{> footer}}
+
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+    <script src="/js/formValidation1.js"></script>
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+            });
+        });
+
+        function setStatus(status, formType) {
+            if (formType === 'edit') {
+                // Update hidden input field and button styles in edit modal
+                document.getElementById('editStatus').value = status;
+                
+                // Update button styles
+                document.getElementById('editActiveButton').classList.toggle('btn-primary', status === 'Active');
+                document.getElementById('editActiveButton').classList.toggle('btn-outline-primary', status !== 'Active');
+                document.getElementById('editInactiveButton').classList.toggle('btn-secondary', status === 'Inactive');
+                document.getElementById('editInactiveButton').classList.toggle('btn-outline-secondary', status !== 'Inactive');
+            } else {
+                // Update hidden input field and button styles in main form
+                document.getElementById('status').value = status;
+                
+                // Update button styles
+                document.getElementById('activeButton').classList.toggle('btn-primary', status === 'Active');
+                document.getElementById('activeButton').classList.toggle('btn-outline-primary', status !== 'Active');
+                document.getElementById('inactiveButton').classList.toggle('btn-secondary', status === 'Inactive');
+                document.getElementById('inactiveButton').classList.toggle('btn-outline-secondary', status !== 'Inactive');
+            }
+        }
+
+        function populateEditForm(id, epf_id, epf_no, esi_no, status) {
+            document.getElementById('editForm').action = '/pfupdate/' + id;
+            document.getElementById('editepf_id').value = epf_id; // adjust accordingly
+            document.getElementById('editepf_no').value = epf_no;
+            document.getElementById('editesi_no').value = esi_no; // adjust accordingly
+            setStatus(status, 'edit');
+        }
+    </script>
+</body>
+
+</html>

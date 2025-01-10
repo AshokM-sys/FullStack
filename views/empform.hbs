@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Form</title>
+    <style>
+        .image-preview {
+            display: none;
+            position: absolute; /* Use absolute positioning */
+            margin-top: 5px; /* Space from the upload button */
+            max-width: 200px; /* Adjust as needed */
+            max-height: 200px; /* Adjust as needed */
+            border: 1px solid #ccc; /* Optional: Add border */
+            background-color: #f8f8f8; /* Optional: Background color */
+            border-radius: 5px;
+        }
+        .image-container {
+            position: relative; /* Set relative positioning for the container */
+        }
+    .is-invalid {
+        border-color: red;
+    }
+    </style>
+</head>
+
+<body>
+    {{> header}}
+
+    {{> navbar}}
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Employee Form</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Employee Form</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="col-md-12"></div>
+
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="empdetails">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-primary">
+                                        <div id="employeeFormSection">
+                                            <div class="card-header bg-primary">
+                                                <h3 class="card-title">Employee Details</h3>
+                                            </div>
+                                            <form id="empdtsubmit" action="/empdtsubmit" method="post" enctype="multipart/form-data">
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="empCode">Employee Code</label>
+                                                            <input type="text" name="empCode" class="form-control" id="empCode" placeholder="" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="fname">First Name</label>
+                                                            <input type="text" name="fname" class="form-control" id="fname" placeholder="First Name">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="lname">Last Name</label>
+                                                            <input type="text" name="lname" class="form-control" id="lname" placeholder="Last Name">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                        <div class="col-md-4 image-container">
+                                                            <label for="photo">Upload Photo</label>
+                                                            <input type="file" id="photoInput" name="photo" accept="image/*" class="form-control-file d-flex" style="display: inline-block;">
+                                                            <img id="imagePreview" class="image-preview" alt="Image Preview" style="margin-top: 5px;">
+                                                            <button type="button" id="viewImageButton" style="display: none; background: none; border: none; padding: 0; cursor: pointer;">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="fathername">Father Name</label>
+                                                            <input type="text" name="fathername" class="form-control" id="fathername" placeholder="Father Name">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="mothername">Mother Name</label>
+                                                            <input type="text" name="mothername" class="form-control" id="mothername" placeholder="Mother Name">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="gender">Gender</label>
+                                                            <select class="form-control" id="employee_gender" name="gender" >
+                                                                <div class="error-message"></div>
+                                                            <!-- Options will be populated by JavaScript -->
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="email">Email address</label>
+                                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="dob">Date of Birth</label>
+                                                            <input type="date" name="dob" class="form-control" id="dob">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="doj">Date of Joining</label>
+                                                            <input type="date" name="doj" class="form-control" id="doj">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="role">Role</label>
+                                                            <select class="form-control" id="employee_role" name="role_id">
+                                                                <div class="error-message"></div>
+                                                                <!-- Options will be populated by JavaScript -->
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="department">Department</label>
+                                                            <select class="form-control" id="department" name="department">
+                                                                <div class="error-message"></div>
+                                                            <!-- Options will be populated by JavaScript -->
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-4">
+                                                            <label for="password">Password</label>
+                                                            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="confirm_password">Confirm Password</label>
+                                                            <input type="password" name="confirm_password" class="form-control" id="confirm_password" placeholder="Confirm Password">
+                                                            <div class="error-message"></div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="status">Status</label><br>
+                                                            <div class="btn-group" role="group" aria-label="Status selection">
+                                                                <button type="button" class="btn btn-outline-primary" id="activeButton" onclick="setStatus('Active')">Active</button>
+                                                                <button type="button" class="btn btn-outline-secondary" id="inactiveButton" onclick="setStatus('Inactive')">Inactive</button>
+                                                                <div class="error-message"></div>
+                                                            </div>
+                                                            <input type="hidden" name="status" id="status" value="Active"> <!-- Default to Active -->
+                                                        </div>
+                                                    </div>
+
+                                                    
+                        <!-- jquery validation -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Family Details</h3>
+                            </div>
+                        <div class="card-body family-details-box">
+                            <div id="familyDetailsContainer" class="border p-3 rounded">
+                                <!-- Family details section start -->
+                                <div class="row mb-2 align-items-center">
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <i class="fas fa-plus plus-icon bg-secondary p-1" id="addRowButton" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                                <!-- Labels for the form -->
+                                <div class="row mb-2">
+                                    <div class="col-3"><label>Name</label></div>
+                                    <div class="col-3"><label>Relationship</label></div>
+                                    <div class="col-3"><label>Age</label></div>
+                                    <div class="col-3"><label>Occupation</label></div>
+                                </div>
+                                <!-- Initial Row -->
+                                <div class="row family-detail-row align-items-end mb-2">
+                                    <div class="col-3">
+                                        <input type="text" id="famName_0" name="famName[]" class="form-control" placeholder="Enter Name">
+                                    </div>
+                                    <div class="col-3">
+                                        <select name="famRelation[]" class="form-control" id="famRelation_0">
+                                            <option value="">Select Relationship</option>
+                                            <option value="Father">Father</option>
+                                            <option value="Mother">Mother</option>
+                                            <option value="Brother">Brother</option>
+                                            <option value="Sister">Sister</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="number" id="famAge_0" name="famAge[]" class="form-control" placeholder="Enter Age">
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" id="famOccupation_0" name="famOccupation[]" class="form-control" placeholder="Enter Occupation">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                                                            <button type="submit" class="btn btn-success float-right">Submit</button>
+                                                        </div>
+                                            </form>
+                                                    
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.tab-content -->
+                </div><!-- /.card-body -->
+            </div>
+        </section>
+        <!-- /.content-wrapper -->
+
+        {{> footer}}
+
+<!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+    <script src="/js/employeeformValidation.js"></script>
+    
+        <script>
+            const photoInput = document.getElementById('photoInput');
+            const imagePreview = document.getElementById('imagePreview');
+
+            photoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result; // Set the source of the image
+                        imagePreview.style.display = 'block'; // Show the image preview
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = 'none'; // Hide the image preview if no file is selected
+                }
+            });
+        </script>
+        <script>
+            function setStatus(status, formType) {
+            if (formType === 'edit') {
+                // Update hidden input field and button styles in edit modal
+                document.getElementById('editStatus').value = status;
+                
+                // Update button styles
+                document.getElementById('editActiveButton').classList.toggle('btn-primary', status === 'Active');
+                document.getElementById('editActiveButton').classList.toggle('btn-outline-primary', status !== 'Active');
+                document.getElementById('editInactiveButton').classList.toggle('btn-secondary', status === 'Inactive');
+                document.getElementById('editInactiveButton').classList.toggle('btn-outline-secondary', status !== 'Inactive');
+            } else {
+                // Update hidden input field and button styles in main form
+                document.getElementById('status').value = status;
+                
+                // Update button styles
+                document.getElementById('activeButton').classList.toggle('btn-primary', status === 'Active');
+                document.getElementById('activeButton').classList.toggle('btn-outline-primary', status !== 'Active');
+                document.getElementById('inactiveButton').classList.toggle('btn-secondary', status === 'Inactive');
+                document.getElementById('inactiveButton').classList.toggle('btn-outline-secondary', status !== 'Inactive');
+            }
+        }
+
+        </script>
+        <script>
+        $(document).ready(function() {
+            $.get('/next-empcode', function(data) {
+                $('#empCode').val(data.nextEmpCode);
+            });
+
+            $('#employeeForm').on('submit', function(event) {
+                event.preventDefault();
+                const formData = $(this).serialize();
+                $.post('/empdtsubmit', formData, function(response) {
+                    alert(response.message);
+                }).fail(function(err) {
+                    console.error(err);
+                    alert('Failed to add employee.');
+                });
+            });
+        });
+    </script>
+
+<script>
+function populateSelect(url, selectId) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Select Gender</option>'; // Default option
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item; // This should map to the value from your database
+                option.textContent = item; // Display the gender name
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error(`Error fetching data from ${url}:`, error));
+}
+
+// Populate the gender select dropdown
+populateSelect('/gender-select', 'employee_gender');
+</script>
+<script>
+    $(document).ready(function() {
+    $('#employeeForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        const formData = new FormData(this); // Use FormData to handle file uploads
+
+        $.ajax({
+            url: '/empdtsubmit',
+            type: 'POST',
+            data: formData,
+            contentType: false, // Important for file uploads
+            processData: false, // Important for file uploads
+            success: function(response) {
+                alert(response.message); // Show success message
+                window.location.href = '/empform'; // Redirect to the employee form
+            },
+            error: function(err) {
+                console.error(err);
+                alert('Failed to add employee. Please try again.'); // Show error message
+            }
+        });
+    });
+});
+
+</script>
+<script>
+function populateSelect(url, selectId) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Select Department</option>'; // Default option
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item; // This should map to the value from your database
+                option.textContent = item; // Display the gender name
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error(`Error fetching data from ${url}:`, error));
+}
+
+// Populate the gender select dropdown
+populateSelect('/department-select', 'department');
+</script>
+
+<script>
+function populateSelect(url, selectId) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Select Roles</option>'; // Default option
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id; // Use the role_id as the value
+                option.textContent = item.name; // Use the Rname for display
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error(`Error fetching data from ${url}:`, error));
+}
+
+// Populate the role select dropdown
+populateSelect('/role-select', 'employee_role');
+</script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('familyDetailsContainer');
+            let rowCount = 1; // Start with the first row
+
+            document.getElementById('addRowButton').addEventListener('click', function() {
+                // Clone the first row
+                const newRow = container.querySelector('.family-detail-row').cloneNode(true);
+
+                // Update the IDs and names for the new row
+                newRow.querySelectorAll('input, select').forEach(input => {
+                    // Update IDs
+                    const newId = input.id.split('_')[0] + '_' + rowCount;
+                    input.id = newId;
+
+                    // Update names
+                    input.name = input.name.replace(/\[\d+\]/, `[${rowCount}]`);
+                });
+
+                // Clear the values of the new row
+                newRow.querySelectorAll('input, select').forEach(input => {
+                    input.value = '';
+                });
+
+                // Create the minus button
+                const minusButton = document.createElement('i');
+                minusButton.className = 'fas fa-minus minus-icon bg-danger p-1';
+                minusButton.style.cursor = 'pointer';
+                minusButton.style.marginLeft = '';
+                minusButton.addEventListener('click', function() {
+                    container.removeChild(newRow);
+                });
+
+                // Append the minus button to the new row
+                const minusCol = document.createElement('div');
+                minusCol.className = 'col-1 d-flex justify-content-center align-items-center';
+                minusCol.appendChild(minusButton);
+                newRow.appendChild(minusCol);
+
+                // Append the new row to the container
+                container.appendChild(newRow);
+
+                // Update rowCount for the next row
+                rowCount++;
+            });
+        });
+    </script>
+    </body>
+</html>

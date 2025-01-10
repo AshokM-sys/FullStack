@@ -1,0 +1,46 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/home" class="brand-link">
+        <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a>
+
+    <!-- Sidebar Scrollable Area -->
+    <div class="os-scrollbar os-scrollbar-vertical os-scrollbar-auto-hidden">
+        <div class="os-scrollbar-track">
+            <div class="os-scrollbar-handle" style="height: 22.0015%; transform: translate(0px, 0px);"></div>
+        </div>
+        <!-- Sidebar Content -->
+        <div class="sidebar">
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    {{#each menu}}
+                        <li class="nav-item {{#if children.length}}has-treeview{{/if}}">
+                            <a href="{{link}}" class="nav-link {{#if children.length}}nav-link-collapse{{/if}}" {{#if children.length}}data-toggle="collapse" aria-expanded="false" aria-controls="menu{{id}}"{{/if}}>
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    {{name}}
+                                    {{#if children.length}}
+                                        <i class="right fas fa-angle-left"></i>
+                                    {{/if}}
+                                </p>
+                            </a>
+                            {{#if children.length}}
+                                <ul class="nav nav-treeview collapse" id="menu{{id}}">
+                                    {{#each children}}
+                                        <li class="nav-item">
+                                            <a href="{{link}}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>{{name}}</p>
+                                            </a>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            {{/if}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</aside>

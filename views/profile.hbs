@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{> header }}
+  <body>
+  
+    {{> navbar }}
+
+    <div class="container-fluid">
+      <h2>User Profile</h2>
+      <img src="/images/profile.png" />
+      <h3>Name : {{user.NAME}}</h3>
+      <h3>Email : {{user.EMAIL}}</h3>
+    </div>
+  </body>
+</html>
+
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+                language: {
+                    search: "Search:",
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                }
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+
+<script>
+function populateSelect(url, selectId, isArray) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Select</option>'; // Default option
+            
+            // Populate distinct roles or strings
+            if (isArray) {
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item; // Use the string directly as the value
+                    option.textContent = item; // Display the string
+                    select.appendChild(option);
+                });
+            } else {
+                // Populate roles
+                data.distinctRoles.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.role_id; // Use role_id as the value
+                    option.textContent = item.Rname; // Display the role name
+                    select.appendChild(option);
+                });
+
+                // Add a separator for clarity
+                const separatorOption = document.createElement('option');
+                separatorOption.disabled = true;
+                separatorOption.textContent = 'All Roles';
+                select.appendChild(separatorOption);
+
+                // Populate all roles
+                data.allRoles.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.role_id; // Use role_id as the value
+                    option.textContent = item.Rname; // Display the role name
+                    select.appendChild(option);
+                });
+            }
+        })
+        .catch(error => console.error(`Error fetching data from ${url}:`, error));
+}
+
+// Populate the gender, department, and employee role select dropdowns
+populateSelect('/gender-select', 'gender', true); // true because it's an array of strings
+populateSelect('/department-select', 'department', true); // true because it's an array of strings
+populateSelect('/role-select', 'employee_role', false); // false because it returns distinct and all roles
+</script>
