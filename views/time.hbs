@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Picker</title>
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <style>
+        .input-group {
+            width: 25%; /* Set input box width to 25% */
+        }
+    </style>
+</head>
+<body>
+    {{> header}}
+    {{> navbar}}
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Time Picker</h1>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Time picker</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row align-items-center">
+                                <label class="my-2">Shift Time 1:</label>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="reservationtime1">
+                                    </div>
+                                </div>
+                                <label class="my-2 mx-2">Shift Time 2:</label>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="reservationtime2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.1.0
+        </div>
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    </footer>
+
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../plugins/moment/moment.min.js"></script>
+<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+<script src="../../dist/js/adminlte.min.js"></script>
+
+<script>
+    $(function () {
+        function formatTime(start) {
+            return start.format('hh:mm A');
+        }
+
+        // Time picker for Shift Time 1
+        $('#reservationtime1').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePickerIncrement: 10,
+            timePicker24Hour: false,
+            locale: {
+                format: 'hh:mm A'
+            },
+            startDate: moment().startOf('day'),
+            endDate: moment().startOf('day'),
+            drops: 'down'
+        }, function(start) {
+            $('#reservationtime1').val(formatTime(start));
+        });
+
+        // Time picker for Shift Time 2
+        $('#reservationtime2').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePickerIncrement: 10,
+            timePicker24Hour: false,
+            locale: {
+                format: 'hh:mm A'
+            },
+            startDate: moment().startOf('day'),
+            endDate: moment().startOf('day'),
+            drops: 'down'
+        }, function(start) {
+            $('#reservationtime2').val(formatTime(start));
+        });
+    });
+</script>
+
+</body>
+</html>

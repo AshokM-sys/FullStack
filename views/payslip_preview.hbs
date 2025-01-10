@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{> header}}
+    <link rel="stylesheet" href="../../plugins/bootstrap/css/bootstrap.min.css">
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+</head>
+<body>
+    {{> navbar}}
+
+<div class="content-wrapper mt-5">
+    <section class="content-header">
+        <div class="container-fluid">
+            <h5>Payslip Preview for Employee Code: {{empCode}}</h5>
+            <div id="companyDetails" class="mb-4">
+                <!-- Company details will be injected here -->
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div id="loading" style="display:none;">Loading...</div>
+            <div id="payslipDetails" class="mt-4"></div>
+            <div id="totalSalary" class="mt-4">
+                <strong>Total Salary: <span id="totalSalaryValue">0.00</span></strong>
+            </div>
+            <button id="downloadPdf" class="btn btn-primary mt-4 float">Download as PDF</button>
+        </div>
+    </section>
+</div>
+
+    {{> footer}}
+
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            fetchCompanyDetails(); // Fetch company details on page load
+            const empCode = "{{empCode}}";
+            if (empCode) {
+                fetchPayslipDetails(empCode);
+            } else {
+                $('#payslipDetails').html('<p>Error: Employee code not found.</p>');
+            }
+        });
+
+        function fetchCompanyDetails() {
+            $.get('/api/company')
+                .done(function(companyData) {
+                    if (companyData.company.length) {
+                        const company = companyData.company[0]; // Assuming we only need the first company
+                        const companyHtml = `
+                            <div class="company-details d-flex align-items-center mb-4">
+                                <img src="${company.Logopath}" alt="${company.CompanyName}" class="mr-3" style="max-width: 70px; height: 70px;">
+                                <div class="text-center">
+                                    <h3 class="text-danger">${company.CompanyName}</h3>
+                                    <div>${company.Address}</div>
+                                    <div>${company.City}, ${company.State} - ${company.Pincode}</div>
+                                </div>
+                            </div>
+                        `;
+                        $('#companyDetails').html(companyHtml);
+                    } else {
+                        $('#companyDetails').html('<p>Error: Company details not found.</p>');
+                    }
+                })
+                .fail(function() {
+                    $('#companyDetails').html('<p>Error fetching company details.</p>');
+                });
+        }
+
+        function fetchPayslipDetails(empCode) {
+            $('#loading').show(); // Show loading
+            $.get(`/api/salary/${empCode}`)
+                .done(function(salaryData) {
+                    $.get(`/api/attendance/${empCode}`)
+                        .done(function(attendanceData) {
+                            displayPayslip(salaryData, attendanceData);
+                        })
+                        .fail(function() {
+                            $('#payslipDetails').html('<p>Error fetching attendance details.</p>');
+                        })
+                        .always(function() {
+                            $('#loading').hide(); // Hide loading
+                        });
+                })
+                .fail(function() {
+                    $('#payslipDetails').html('<p>Error fetching salary details.</p>');
+                    $('#loading').hide(); // Hide loading
+                });
+        }
+
+        function displayPayslip(salaryData, attendanceData) {
+            const totalSalary = calculateTotalSalary(salaryData.Basic, attendanceData.present_days);
+            const payslipHtml = `
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Detail</th>
+                            <th>Value</th>
+                            <th>Detail</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Employee Name</td><td>${salaryData.empName || ''}</td><td>Total Working Days</td><td>${attendanceData.total_days || 0}</td></tr>
+                        <tr><td>Basic</td><td>${salaryData.Basic || ''}</td><td>No. of Days Present</td><td>${attendanceData.present_days || 0}</td></tr>
+                        <tr><td>DA</td><td>${salaryData.DA || ''}</td><td>No. of Days Absent</td><td>${attendanceData.absent_days || 0}</td></tr>
+                        <tr><td>HRA</td><td>${salaryData.HRA || ''}</td><td>Month / Year</td><td>${attendanceData.month || ''} / ${attendanceData.year || ''}</td></tr>
+                        <tr><td>Conveyance</td><td>${salaryData.Conveyance || ''}</td><td>Total Salary</td><td>${totalSalary}</td></tr>
+                        <tr><td>EPF</td><td>${salaryData.EPF || ''}</td><td>Incentive</td><td>${salaryData.Incentive || ''}</td></tr>
+                        <tr><td>Account Number</td><td>${salaryData.account_number || ''}</td><td>Bank Name</td><td>${salaryData.bank_details?.bank_name || ''}</td></tr>
+                        <tr><td>Branch Name</td><td>${salaryData.bank_details?.branch || ''}</td><td>IFSC Code</td><td>${salaryData.bank_details?.ifsc_code || ''}</td></tr>
+                    </tbody>
+                </table>
+            `;
+            $('#payslipDetails').html(payslipHtml);
+            $('#totalSalaryValue').text(totalSalary); // Display total salary
+        }
+
+        function calculateTotalSalary(basic, presentDays) {
+            const dailySalary = parseFloat(basic) / 30; // Assuming 30 days in a month
+            return (dailySalary * presentDays).toFixed(2);
+        }
+
+        $('#downloadPdf').on('click', function() {
+    const element = document.getElementById('payslipDetails');
+    const companyDetails = document.getElementById('companyDetails').innerHTML;
+    const totalSalary = $('#totalSalaryValue').text();
+    
+    // Create a PDF content with padding and total salary on the right
+    const pdfContent = `
+        <div style="padding: 20px;">
+            <div>${companyDetails}</div>
+            <div>${element.outerHTML}</div>
+            <div style="text-align: right; margin-top: 20px;">
+                <strong>Total Salary: ${totalSalary}</strong>
+            </div>
+        </div>
+    `;
+
+    const pdfElement = document.createElement('div');
+    pdfElement.innerHTML = pdfContent;
+
+    html2pdf()
+        .from(pdfElement)
+        .save('payslip.pdf');
+});
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> header}}
+</head>
+
+<body>
+    {{> navbar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Salary Basic Details</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Salary Basics</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- jquery validation -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Salary Basic Details</h3>
+                            </div>
+                           <form action="/insertsalarybasics" method="POST" onsubmit="return validateSalaryForm()">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-4">
+                <label for="empCode">Enter Employee Code</label>
+                <input type="number" name="empCode" class="form-control" id="empCode" placeholder="Employee Code">
+                <span id="empCodeError" style="color:red;"></span>
+            </div>
+            <div class="col-md-4">
+                <label for="empName">Employee Name</label>
+                <input type="text" name="empName" class="form-control" id="empName" placeholder="" readonly>
+            </div>
+        </div>
+        <!-- Salary Fields -->
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="Basic">Basic Salary</label>
+                <input type="text" class="form-control" id="Basic" name="Basic" placeholder="Enter Basic Salary">
+                <span id="basicSalaryError" style="color:red;"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="DA">DA</label>
+                <input type="text" class="form-control" id="DA" name="DA" placeholder="Enter DA">
+                <span id="daError" style="color:red;"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="HRA">HRA</label>
+                <input type="text" class="form-control" id="HRA" name="HRA" placeholder="Enter HRA">
+                <span id="hraError" style="color:red;"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="Conveyance">Conveyance</label>
+                <input type="text" class="form-control" id="Conveyance" name="Conveyance" placeholder="Enter Conveyance">
+                <span id="conveyanceError" style="color:red;"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Salary">Salary</label>
+                <input type="text" class="form-control" id="Salary" name="Salary" placeholder="Enter Salary">
+                <span id="salaryError" style="color:red;"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="EPF">EPF</label>
+                <input type="text" class="form-control" id="EPF" name="EPF" placeholder="Enter EPF">
+                <span id="epfError" style="color:red;"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="ESI">ESI</label>
+                <input type="text" class="form-control" id="ESI" name="ESI" placeholder="Enter ESI">
+                <span id="esiError" style="color:red;"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Advance">Advance</label>
+                <input type="text" class="form-control" id="Advance" name="Advance" placeholder="Enter Advance">
+                <span id="advanceError" style="color:red;"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Incentive">Incentive</label>
+                <input type="text" class="form-control" id="Incentive" name="Incentive" placeholder="Enter Incentive">
+                <span id="incentiveError" style="color:red;"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Bank Details</h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="form-group row" id="bankDetails">
+            <div class="col-md-4">
+                <label for="branch">Enter Branch</label>
+                <input type="text" name="branch" class="form-control" id="branch" placeholder="Enter Branch Name" >
+                <span id="branchError" style="color:red;"></span>
+            </div>
+            <div class="col-md-4">
+                <label for="bankName">Bank Name</label>
+                <input type="text" name="bankName" class="form-control" id="bankName" placeholder="Bank Name">
+                <span id="bankNameError" style="color:red;"></span>
+            </div>
+            <div class="col-md-4">
+                <label for="ifscCode">IFSC Code</label>
+                <input type="text" name="ifscCode" class="form-control" id="ifscCode" placeholder="IFSC Code">
+                <span id="ifscCodeError" style="color:red;"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-4">
+                <label for="account_number">Enter Account Number</label>
+                <input type="number" name="account_number" id="account_number" class="form-control" placeholder="Account Number">
+                <span id="accountNumberError" style="color:red;"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary float-right">Submit</button>
+    </div>
+</form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Salary Basics</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" role="grid">
+                    <thead>
+                        <tr>
+                            <td>Id</td>
+                            <th>Employee Code</th>
+                            <th>Employee Name</th>
+                            <th>Basic</th>
+                            <th>DA</th>
+                            <th>HRA</th>
+
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each display}}
+                            <tr>
+                                <td>{{id}}</td>
+                                <td>{{this.empCode}}</td>
+                                <td>{{this.empName}}</td>
+                                <td>{{this.Basic}}</td>
+                                <td>{{this.DA}}</td>
+                                <td>{{this.HRA}}</td>
+                                <td>
+                                    <a href="#" onclick="populateEditForm('{{this.id}}', '{{this.empCode}}', '{{this.empName}}', '{{this.Basic}}', '{{this.DA}}', '{{this.HRA}}', '{{this.Conveyance}}', '{{this.Salary}}', '{{this.EPF}}', '{{this.ESI}}', '{{this.Advance}}', '{{this.Incentive}}')" data-toggle="modal" data-target="#editModal" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="/codelete/{{this.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </section>
+    </div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Salary Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editForm">
+                <div class="modal-body">
+                    <input type="hidden" id="editId" name="id">
+                    <div class="form-group">
+                        <label for="editEmpCode">Employee Code</label>
+                        <input type="text" class="form-control" id="editEmpCode" name="empCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmpName">Employee Name</label>
+                        <input type="text" class="form-control" id="editEmpName" name="empName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBasic">Basic Salary</label>
+                        <input type="text" class="form-control" id="editBasic" name="Basic" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDA">DA</label>
+                        <input type="text" class="form-control" id="editDA" name="DA" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editHRA">HRA</label>
+                        <input type="text" class="form-control" id="editHRA" name="HRA" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editConveyance">Conveyance</label>
+                        <input type="text" class="form-control" id="editConveyance" name="Conveyance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSalary">Salary</label>
+                        <input type="text" class="form-control" id="editSalary" name="Salary" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEPF">EPF</label>
+                        <input type="text" class="form-control" id="editEPF" name="EPF" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editESI">ESI</label>
+                        <input type="text" class="form-control" id="editESI" name="ESI" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAdvance">Advance</label>
+                        <input type="text" class="form-control" id="editAdvance" name="Advance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editIncentive">Incentive</label>
+                        <input type="text" class="form-control" id="editIncentive" name="Incentive" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="refreshPage()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Form submitted successfully!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="refreshPage()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    {{> footer}}
+
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- DataTables & Plugins -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../plugins/jszip/jszip.min.js"></script>
+    <script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.js"></script>
+    <script src="/js/formValidation1.js"></script>
+    <!-- Select2 -->
+    <script src="../../plugins/select2/js/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="../../plugins/moment/moment.min.js"></script>
+    <script src="../../plugins/inputmask/jquery.inputmask.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+
+<script>
+    $(document).ready(function() {
+        $('#empCode').on('change', function() {
+            const empCode = $(this).val();
+            if (empCode) {
+                $.ajax({
+                    url: `/api/employees/${empCode}`,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#empName').val(data.empName);
+                    },
+                    error: function(err) {
+                        $('#empName').val(''); // Clear the empName field if there's an error
+                        alert(err.responseJSON.message || 'Error fetching employee data');
+                    }
+                });
+            } else {
+                $('#empName').val(''); // Clear if empCode is empty
+            }
+        });
+    });
+</script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+                language: {
+                    search: "Search:",
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                }
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+        </script>
+
+        <script>
+            function populateEditForm(id, empCode, empName, Basic, DA, HRA, Conveyance, Salary, EPF, ESI, Advance, Incentive) {
+    document.getElementById('editId').value = id;
+    document.getElementById('editEmpCode').value = empCode;
+    document.getElementById('editEmpName').value = empName;
+    document.getElementById('editBasic').value = Basic;
+    document.getElementById('editDA').value = DA;
+    document.getElementById('editHRA').value = HRA;
+    document.getElementById('editConveyance').value = Conveyance;
+    document.getElementById('editSalary').value = Salary;
+    document.getElementById('editEPF').value = EPF;
+    document.getElementById('editESI').value = ESI;
+    document.getElementById('editAdvance').value = Advance;
+    document.getElementById('editIncentive').value = Incentive;
+}
+
+document.getElementById('editForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const id = document.getElementById('editId').value;
+    const empCode = document.getElementById('editEmpCode').value;
+    const empName = document.getElementById('editEmpName').value;
+    const Basic = document.getElementById('editBasic').value;
+    const DA = document.getElementById('editDA').value;
+    const HRA = document.getElementById('editHRA').value;
+    const Conveyance = document.getElementById('editConveyance').value;
+    const Salary = document.getElementById('editSalary').value;
+    const EPF = document.getElementById('editEPF').value;
+    const ESI = document.getElementById('editESI').value;
+    const Advance = document.getElementById('editAdvance').value;
+    const Incentive = document.getElementById('editIncentive').value;
+
+    fetch(`/salarybasics/update/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            empCode,
+            empName,
+            Basic,
+            DA,
+            HRA,
+            Conveyance,
+            Salary,
+            EPF,
+            ESI,
+            Advance,
+            Incentive
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        alert(data.message);
+        $('#editModal').modal('hide'); // Hide modal
+        location.reload(); // Refresh page or update table
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+});
+        </script>
+
+<script>
+    document.getElementById('branch').addEventListener('blur', function() {
+        const branchName = this.value.trim(); // Trim whitespace
+
+        // Make sure to include the branch name in the fetch URL
+        fetch(`/getbranch?name=${encodeURIComponent(branchName)}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Branch not found');
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('bankName').value = data.bank_name;
+                document.getElementById('ifscCode').value = data.ifsc_code;
+            })
+            .catch(error => {
+                console.error('Error fetching branch details:', error);
+                alert('Branch not found. Please try again.');
+            });
+    });
+</script>
+
+
+</body>
+</html>

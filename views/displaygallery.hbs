@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{> header}} <!-- Assuming this is a partial for the header -->
+    <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+      <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+</head>
+
+<body>
+    {{> navbar}} <!-- Assuming this is a partial for the navbar -->
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Gallery</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Gallery</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h4 class="card-title">Event Gallery</h4>
+                            </div>
+
+                            <div class="row">
+                    <div class="col-md-10 offset-md-1">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Result Type:</label>
+                                    <select class="select2" multiple="multiple" data-placeholder="Any" style="width: 100%;">
+                                        <option>Text only</option>
+                                        <option>Images</option>
+                                        <option>Video</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Sort Order:</label>
+                                    <select class="select2" style="width: 100%;" name="sortOrder">
+                                        <option selected>ASC</option>
+                                        <option>DESC</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Order By:</label>
+                                    <select name="orderByDate" class="select2" style="width: 100%;">
+    <option value="Title">Title</option>
+    <option value="Date">Date</option>
+</select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+    <div class="input-group input-group-lg">
+        <input type="search" id="searchInput" class="form-control form-control-lg" placeholder="Type your keywords here">
+        <div class="input-group-append">
+            <button type="button" class="btn btn-lg btn-default" id="searchButton">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+                    </div>
+                </div>
+
+                                {{#each display}} <!-- Loop through each event -->
+                                    <div class="event-container"  data-event-date="{{event_date}}">
+                                        <h3 data-event-name="{{event_name}}">Event Name: {{event_name}}</h3> <!-- Display event name -->
+                                        <h5 id="event-date">Event Date: {{event_date}}</h5>
+                                        <input type="month" id="selectedDate" name="selectedDate" style="display:none">
+                                        <div class="gallery-images">
+                                            {{#if photo_1}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_1}}" alt="{{event_name}} Photo 1" onclick="previewImage('{{photo_1}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_1}}', '{{event_name}}', 1)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_2}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_2}}" alt="{{event_name}} Photo 2" onclick="previewImage('{{photo_2}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_2}}', '{{event_name}}', 2)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_3}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_3}}" alt="{{event_name}} Photo 3" onclick="previewImage('{{photo_3}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_3}}', '{{event_name}}', 3)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_4}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_4}}" alt="{{event_name}} Photo 4" onclick="previewImage('{{photo_4}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_4}}', '{{event_name}}', 4)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_5}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_5}}" alt="{{event_name}} Photo 5" onclick="previewImage('{{photo_5}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_5}}', '{{event_name}}', 5)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_6}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_6}}" alt="{{event_name}} Photo 6" onclick="previewImage('{{photo_6}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_6}}', '{{event_name}}', 6)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_7}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_7}}" alt="{{event_name}} Photo 7" onclick="previewImage('{{photo_7}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_7}}', '{{event_name}}', 7)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_8}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_8}}" alt="{{event_name}} Photo 8" onclick="previewImage('{{photo_8}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_8}}', '{{event_name}}', 8)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_9}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_9}}" alt="{{event_name}} Photo 9" onclick="previewImage('{{photo_9}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_9}}', '{{event_name}}', 9)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_10}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_10}}" alt="{{event_name}} Photo 10" onclick="previewImage('{{photo_10}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_10}}', '{{event_name}}', 10)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_11}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_11}}" alt="{{event_name}} Photo 11" onclick="previewImage('{{photo_11}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_11}}', '{{event_name}}', 11)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            {{#if photo_12}} 
+                                                <div class="image-container">
+                                                    <img src="{{photo_12}}" alt="{{event_name}} Photo 12" onclick="previewImage('{{photo_12}}')">
+                                                    <span class="edit-icon" onclick="editImage('{{photo_12}}', '{{event_name}}', 12)">✏️</span>
+                                                </div>
+                                            {{/if}}
+                                            <!-- Add more images similarly -->
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="preview-modal" id="previewModal">
+        <div class="modal-content">
+            <img id="previewImage" src="" alt="Preview">
+            <span onclick="closePreview()">×</span>
+        </div>
+    </div>
+
+    <!-- Image Edit Modal -->
+    <div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="imageEditForm" enctype="multipart/form-data">
+                        <input type="hidden" id="imageIndex">
+                        <input type="hidden" id="eventName">
+                        <div class="mb-3">
+                            <label for="currentImage" class="form-label">Current Image</label><br>
+                            <img id="currentImage" src="" alt="Current Image" class="img-fluid mb-2">
+                        </div>
+                        <div class="mb-3">
+                            <label for="newImage" class="form-label">Upload New Image</label>
+                            <input type="file" class="form-control" id="newImage" name="newImage" accept="image/*" required>
+
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    {{> footer}}
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="../../plugins/select2/js/select2.full.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<script>
+    $(function () {
+      $('.select2').select2()
+    });
+</script>
+
+
+    <script>
+        function editImage(imageUrl, eventName, imageIndex) {
+    $('#editModalLabel').text(`Edit Image for ${eventName}`);
+    $('#currentImage').attr('src', imageUrl);
+    $('#imageIndex').val(imageIndex);  // Set hidden input for imageIndex
+    $('#eventName').val(eventName);    // Set hidden input for eventName
+    $('#editModal').modal('show');
+}
+
+
+        // Function to preview the image
+        function previewImage(imageUrl) {
+            $('#previewImage').attr('src', imageUrl);
+            $('#previewModal').addClass('active');
+        }
+
+        // Close the preview modal
+        function closePreview() {
+            $('#previewModal').removeClass('active');
+        }
+
+        // Handle form submission for image edit
+        $('#imageEditForm').submit(function(e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(this); // Collect form data, including the file
+
+    // Log FormData to ensure the file is included
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ': ' + pair[1]);
+    }
+
+    // You can also manually append the hidden fields to the FormData if needed
+    const imageIndex = $('#imageIndex').val(); // Get the value from the hidden input
+    const eventName = $('#eventName').val();
+
+    if (!imageIndex || !eventName) {
+        alert('Image Index or Event Name is missing.');
+        return;
+    }
+
+    // Append imageIndex and eventName to FormData explicitly if they are not included
+    formData.append('imageIndex', imageIndex);
+    formData.append('eventName', eventName);
+
+    const fileInput = $('#newImage')[0];
+    const file = fileInput.files[0]; // Get the file from the input
+
+    if (!file) {
+        alert('Please select a new image to upload.');
+        return;
+    }
+
+    // Log the file to ensure it's being selected
+    console.log('File selected:', file);
+
+    // Send the request via AJAX
+    $.ajax({
+        url: '/update-image',
+        type: 'POST',
+        data: formData,
+        contentType: false,  // Let FormData handle the content type
+        processData: false,  // Let FormData process the data
+        success: function(response) {
+            if (response.success) {
+                alert(response.message);
+                $('#editModal').modal('hide');
+                location.reload();
+            } else {
+                alert('Failed to update image: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', xhr.responseText);
+            alert('Error updating image: ' + error);
+        }
+    });
+});
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Loop through each event (in case there are multiple events)
+    document.querySelectorAll('.event-container').forEach(function (eventContainer) {
+        const eventDateElement = eventContainer.querySelector('#event-date');
+        if (eventDateElement) {
+            // Get the event date string (assuming it's in dd/mm/yyyy format)
+            let eventDate = eventDateElement.innerText.split(': ')[1]; // Get the date part after "Event Date: "
+            
+            // Convert the date string to a Date object
+            const dateParts = eventDate.split('/'); // Split the dd/mm/yyyy
+            const date = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`); // Convert to yyyy-mm-dd format
+
+            // Check if the date is valid
+            if (isNaN(date.getTime())) {
+                console.error("Invalid date:", eventDate);
+                return; // Skip invalid dates
+            }
+
+            // Format the date to dd/mm/yyyy
+            const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+
+            // Update the element with the formatted date
+            eventDateElement.innerText = `Event Date: ${formattedDate}`;
+
+            // Store the formatted date in the data attribute for easier comparison later
+            eventContainer.setAttribute('data-event-date', formattedDate);
+            eventContainer.setAttribute('data-event-year', date.getFullYear()); // Store only the year as a separate attribute
+            // Store the full year-month (yyyy-mm) for month-year filtering
+            eventContainer.setAttribute('data-event-year-month', `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`);
+        }
+    });
+
+    // Function to filter events based on search input and selected date
+    document.getElementById('searchButton').addEventListener('click', function () {
+        filterGallery();
+    });
+
+    // Optional: Real-time filtering as user types in the search box
+    document.getElementById('searchInput').addEventListener('input', function () {
+        filterGallery();
+    });
+
+    // Listen for changes in "Order By" dropdown to update filtering behavior
+    document.querySelectorAll('.select2').forEach(function (selectElement) {
+        selectElement.addEventListener('change', function () {
+            filterGallery();
+        });
+    });
+
+    // Filter the gallery based on search and date input
+    function filterGallery() {
+        // Get the search keyword (case insensitive)
+        const searchKeyword = document.getElementById('searchInput').value.toLowerCase().trim();
+        
+        // Get the selected date (in yyyy-mm format) from the input field
+        const selectedDate = document.querySelector('input[name="selectedDate"]').value.trim();
+
+        const selectedOrderBy = document.querySelector('select[name="orderByDate"]').value;
+        const selectedSortOrder = document.querySelector('select[name="sortOrder"]').value; // ASC or DESC
+
+        // Loop through each event container and apply filters
+        document.querySelectorAll('.event-container').forEach(function (eventContainer) {
+            // Get the event name (title) and event date from the custom attribute
+            const eventName = eventContainer.querySelector('h3').innerText.toLowerCase(); // Event name
+            const eventYear = eventContainer.getAttribute('data-event-year'); // Extracted year "yyyy"
+            const eventYearMonth = eventContainer.getAttribute('data-event-year-month'); // "yyyy-mm"
+
+            // Check if the event matches the search and date filter
+            const isSearchMatch = eventName.includes(searchKeyword) || eventYear.includes(searchKeyword); // Check if title or year matches search keyword
+            
+            // Check if the event matches the selected date filter
+            const isDateMatch = selectedDate ? eventYearMonth.startsWith(selectedDate) : true; // Check if date matches (yyyy-mm)
+
+            // Apply the filter: show or hide event container
+            if (isSearchMatch && isDateMatch) {
+                eventContainer.style.display = 'block'; // Show event
+            } else {
+                eventContainer.style.display = 'none'; // Hide event
+            }
+        });
+
+        // Sorting events based on "Order By" option (Date) and "Sort Order" (ASC/DESC)
+        if (selectedOrderBy === 'Date') {
+            let events = Array.from(document.querySelectorAll('.event-container'));
+            
+            // Sort events based on date
+            events.sort(function (a, b) {
+                const dateA = new Date(a.getAttribute('data-event-date'));
+                const dateB = new Date(b.getAttribute('data-event-date'));
+
+                // Sort based on selected order (ASC or DESC)
+                return selectedSortOrder === 'ASC' ? dateA - dateB : dateB - dateA;
+            });
+
+            // Get the gallery container
+            const galleryContainer = document.querySelector('.gallery-images');
+            
+            // Clear the container before appending the sorted events
+            galleryContainer.innerHTML = '';
+
+            // Re-append sorted events back to the gallery container
+            events.forEach(event => galleryContainer.appendChild(event)); // Re-append sorted events
+        }
+    }
+});
+
+</script>
+</body>
+</html>

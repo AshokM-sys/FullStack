@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Header Partial -->
+    {{> header}}
+</head>
+
+<body>
+    <!-- Include Navbar Partial -->
+    {{> navbar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Video Gallery</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Video Gallery</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Left column -->
+                    <div class="col-md-12">
+                        <!-- Video Gallery -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">YouTube Video</h3>
+                            </div>
+                            <div class="card-body">
+                                {{#each display}}
+                                <div class="list-group-item">
+                                    <div class="row">
+                                        <!-- Video thumbnail -->
+                                        <div class="col-auto">
+                                            <iframe width="240" height="160" src="{{this.video_url}}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" class="border-0" allowfullscreen></iframe>
+                                        </div>
+                                        <!-- Video title, description, and date -->
+                                        <div class="col px-4">
+                                            <div>
+                                                <div class="float-right" id="posted-date">{{this.created_at}}</div>
+                                                <h3>{{this.title}}</h3>
+                                                <p class="mb-0">{{this.description}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        // Loop through each posted date element (in case there are multiple)
+        document.querySelectorAll('#posted-date').forEach(function(eventDateElement) {
+            // Get the date string from the element (assuming it's in yyyy-mm-dd format)
+            let eventDate = eventDateElement.innerText;
+
+            // Convert the date string to a Date object
+            const date = new Date(eventDate);
+
+            // Check if the date is valid
+            if (isNaN(date.getTime())) {
+                console.error("Invalid date:", eventDate);
+                return; // Skip invalid dates
+            }
+
+            // Format the date to dd/mm/yyyy
+            const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+
+            // Update the element with the formatted date
+            eventDateElement.innerText = formattedDate;
+        });
+    });
+    </script>
+</body>
+
+</html>
