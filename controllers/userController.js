@@ -22,7 +22,7 @@ exports.postLogin = (req, res) => {
 
     const sql = `
         SELECT e.fname, e.empCode, r.Rname AS position, e.password 
-        FROM Employees e 
+        FROM employees e 
         JOIN roles r ON e.role_id = r.role_id
         WHERE e.fname = ?
     `;

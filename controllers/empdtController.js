@@ -8,7 +8,7 @@ exports.getEmployee = (req, res) => {
   // SQL query to get employee and their family details
   const sql = `
     SELECT e.*, f.name AS famName, f.relationship, f.age, f.occupation
-    FROM Employees e
+    FROM employees e
     LEFT JOIN family_details f ON e.id = f.emp_id
     WHERE e.id = ?`;
 
@@ -49,7 +49,7 @@ exports.getEmployee = (req, res) => {
 };
 
 exports.getGenders = (req, res) => {
-  db.query("SELECT DISTINCT gender FROM Employees", (error, results) => {
+  db.query("SELECT DISTINCT gender FROM employees", (error, results) => {
     if (error) return res.status(500).send(error);
     const genders = results.map((row) => row.gender);
     res.json(genders);
